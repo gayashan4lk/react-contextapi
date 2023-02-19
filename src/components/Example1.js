@@ -1,21 +1,27 @@
-import { useState } from 'react';
+import { useState, createContext, useContext } from 'react';
+
+const AppContext = createContext({ userName: '', setUserName: () => {} });
 
 const Parent = () => {
 	const [userName, setUserName] = useState('');
 
 	return (
-		<div>
-			{userName}
-			<Child setUserName={setUserName} />
-		</div>
+		<AppContext.Provider value={{ userName, setUserName }}>
+			<div>
+				{userName}
+				<Child />
+			</div>
+		</AppContext.Provider>
 	);
 };
 
-const Child = ({ setUserName }) => {
-	return <GrandChild setUserName={setUserName} />;
+const Child = () => {
+	return <GrandChild />;
 };
 
-const GrandChild = ({ setUserName }) => {
+const GrandChild = () => {
+	const { setUserName } = useContext(AppContext);
+
 	return (
 		<div>
 			<button
